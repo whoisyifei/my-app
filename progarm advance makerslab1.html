@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUBELESS Hospital System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Rubik%27s_cube_logo.svg/1024px-Rubik%27s_cube_logo.svg.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-img {
+            max-height: 500px;
+            object-fit: cover;
+        }
+        .text-primary {
+            color: #004d99 !important;
+        }
+        .btn-primary {
+            background-color: #004d99;
+            border-color: #004d99;
+        }
+        .btn-primary:hover {
+            background-color: #003366;
+            border-color: #003366;
+        }
+        .navbar-brand .fw-bold {
+            color: #004d99;
+        }
+        .text-pantai-blue {
+            color: #004d99;
+        }
+        .bg-pantai-blue {
+            background-color: #004d99;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Page visibility */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        
+        .navbar-links-container {
+            display: flex !important;
+            flex-grow: 1;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .navbar-links-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .navbar-links-container .navbar-nav {
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
+        .navbar-links-container .nav-item {
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+        }
+
+        .message-box {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            background-color: #22c55e;
+            color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        .message-box.show {
+            opacity: 1;
+        }
+        .message-box.error {
+            background-color: #ef4444;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navmenu">
+
+    <!-- Message Box for Alerts -->
+    <div id="message-box" class="message-box"></div>
+
+    <!-- Navbar -->
+    <nav id="navmenu" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#" onclick="showPage('home')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Rubik%27s_cube_logo.svg/1024px-Rubik%27s_cube_logo.svg.png" alt="CUBELESS Hospital Logo" width="40" class="me-2 rounded">
+                <span class="fw-bold">CUBELESS Hospital</span>
+            </a>
+            <div class="navbar-links-container" id="navbar-links">
+                <ul class="navbar-nav ms-auto fw-semibold">
+                    <li class="nav-item"><a class="nav-link active text-primary" href="#" onclick="showPage('home')">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about-section">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services-section">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#doctors-section">Doctors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact-section">Contact</a></li>
+                    <li class="nav-item" id="login-link"><a class="nav-link bg-pantai-blue text-white rounded-pill px-4 cursor-pointer" onclick="showPage('login')">Log In</a></li>
+                    <li class="nav-item" id="dashboard-link" style="display:none;"><a class="nav-link bg-pantai-blue text-white rounded-pill px-4 cursor-pointer" onclick="showPage('dashboard')">Dashboard</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="home-page" class="page active">
+        <!-- Hero Carousel -->
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://hms.harvard.edu/sites/default/files/media/800-Doctors-Talking-GettyImages-1421919753.jpg" class="d-block w-100 hero-img" alt="Doctors Talking">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h1 class="display-4 fw-bold">Your Health, Our Priority</h1>
+                        <p class="lead">Trusted healthcare with modern technology.</p>
+                        <a href="#services-section" class="btn btn-primary btn-lg">Explore Services</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://greenbayces.com/wp-content/uploads/2021/12/modern-equipment-operating-room-medical-devices-neurosurgery.jpg" class="d-block w-100 hero-img" alt="Modern Medical Equipment">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h1 class="display-4 fw-bold">Advanced Medical Facilities</h1>
+                        <p class="lead">Cutting-edge equipment and world-class care.</p>
+                        <a href="#" class="btn btn-primary btn-lg">Book Appointment</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://islandhospital.com/wp-content/uploads/2023/01/hospital-about-us-patient-42.jpg" class="d-block w-100 hero-img" alt="Doctor and Patient">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h1 class="display-4 fw-bold">Compassionate Care</h1>
+                        <p class="lead">Dedicated doctors for every patient's journey.</p>
+                        <a href="#" class="btn btn-primary btn-lg">Meet Our Doctors</a>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="container" style="margin-top: -2rem; position: relative; z-index: 10;">
+            <div class="row g-4 p-4 rounded-3 card-shadow bg-white">
+                <div class="col-6 col-md-3">
+                    <a href="#" class="d-flex flex-column align-items-center justify-content-center p-3 rounded text-center h-100 text-decoration-none transition-transform" style="background-color: #c9e885; min-height: 120px;">
+                        <i class="bi bi-calendar-check fs-2 mb-2 text-dark"></i>
+                        <span class="small fw-semibold text-dark">Request an Appointment</span>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="#doctors-section" class="d-flex flex-column align-items-center justify-content-center p-3 rounded text-center h-100 text-decoration-none" style="background-color: #f7d56e; min-height: 120px;">
+                        <i class="bi bi-stethoscope fs-2 mb-2 text-dark"></i>
+                        <span class="small fw-semibold text-dark">Find a Doctor</span>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="#about-section" class="d-flex flex-column align-items-center justify-content-center p-3 rounded text-center h-100 text-decoration-none" style="background-color: #8ed2e1; min-height: 120px;">
+                        <i class="bi bi-hospital fs-2 mb-2 text-dark"></i>
+                        <span class="small fw-semibold text-dark">Our Hospitals</span>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="#services-section" class="d-flex flex-column align-items-center justify-content-center p-3 rounded text-center h-100 text-decoration-none" style="background-color: #f693cc; min-height: 120px;">
+                        <i class="bi bi-box-seam-fill fs-2 mb-2 text-dark"></i>
+                        <span class="small fw-semibold text-dark">Health Screening Packages</span>
+                    </a>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <button id="ai-chatbox-btn" class="w-full bg-pantai-blue text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-800 transition duration-300">AI Chatbox</button>
+                </div>
+                 <div class="col-12 mt-4">
+                    <button id="patient-questionnaire-btn" class="w-full bg-pantai-blue text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-800 transition duration-300" onclick="showPage('questionnaire')">Patient Questionnaire</button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Services -->
+        <section id="services-section" class="py-5 bg-light">
+            <div class="container text-center">
+                <h2 class="fw-bold text-primary mb-4">Our Services</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img src="https://islandhospital.com/wp-content/uploads/2023/01/hospital-about-us-patient-42.jpg" class="card-img-top" alt="Checkup">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Health Screening</h5>
+                                <p class="card-text">Comprehensive health screening packages for early detection and prevention.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img src="https://greenbayces.com/wp-content/uploads/2021/12/modern-equipment-operating-room-medical-devices-neurosurgery.jpg" class="card-img-top" alt="Emergency">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Emergency Care</h5>
+                                <p class="card-text">24/7 emergency response with dedicated medical teams and modern facilities.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img src="https://hospitalsmagazine.com/wp-content/uploads/2024/09/robotic-surgery-.jpg" class="card-img-top" alt="Specialist">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Specialist Clinics</h5>
+                                <p class="card-text">Consultations with expert specialists across multiple medical fields.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About -->
+        <section id="about-section" class="py-5">
+            <div class="container text-center">
+                <h2 class="fw-bold text-primary mb-3">About Us</h2>
+                <p class="lead text-muted">
+                    At CUBELESS Hospital, we combine innovation with compassion. With expert doctors, advanced equipment, and personalized care, we aim to be your trusted healthcare partner.
+                </p>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section id="doctors-section" class="py-5 bg-primary text-white">
+            <div class="container text-center">
+                <h2 class="fw-bold mb-4">Why Choose CUBELESS?</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <h4>✔ Experienced Doctors</h4>
+                        <p>Over 100 specialists in various medical fields.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>✔ Modern Facilities</h4>
+                        <p>Equipped with cutting-edge technology for accurate diagnosis.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>✔ Patient-Centered Care</h4>
+                        <p>We prioritize comfort, compassion, and respect in all treatments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- News Section -->
+        <section id="contact-section" class="py-5 bg-light">
+            <div class="container text-center">
+                <h2 class="fw-bold text-primary mb-4">Latest News & Updates</h2>
+                <div class="row g-4">
+                    <!-- News Card 1 -->
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-0 h-100">
+                            <img src="https://exyvvjngjh3.exactdn.com/wp-content/uploads/2020/12/Altnagelvin-North-Wing-Dusk_2856-x-1608pixel-scaled.jpg?strip=all&lossy=1&ssl=1" class="card-img-top" alt="New Cardiology Wing" onerror="this.src='https://via.placeholder.com/400x250/004d99/ffffff?text=New+Wing+Opening'" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">New Cardiology Wing Opens</h5>
+                                <p class="card-text">We are proud to launch our state-of-the-art cardiology facilities at CUBELESS Hospital.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- News Card 2 -->
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-0 h-100">
+                            <img src="https://ca-times.brightspotcdn.com/dims4/default/9301e53/2147483647/strip/false/crop/6720x3780+0+350/resize/1200x675!/quality/75/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2F42%2F81%2F1985243b43ecb83bc568de25d941%2Fla-photos-1staff-672138-la-me-covid-vaccine-mlk-011.FO.jpg" class="card-img-top" alt="COVID-19 Safety Measures" onerror="this.src='https://via.placeholder.com/400x250/004d99/ffffff?text=Safety+Measures'" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">COVID-19 Safety Measures</h5>
+                                <p class="card-text">Learn about the protocols we follow to ensure your safety at CUBELESS Hospital.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- News Card 3 -->
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-0 h-100">
+                            <img src="https://live-production.wcms.abc-cdn.net.au/08d30b572b8f25f15830b8fbf8f385b9?impolicy=wcms_crop_resize&cropH=1294&cropW=2300&xPos=120&yPos=261&width=862&height=485" class="card-img-top" alt="New Specialists" onerror="this.src='https://via.placeholder.com/400x250/004d99/ffffff?text=New+Specialists'" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">New Specialists Joined</h5>
+                                <p class="card-text">Meet our latest team of doctors joining various departments at CUBELESS Hospital.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- LOGIN PAGE -->
+    <div id="login-page" class="page min-h-screen bg-light d-flex align-items-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Rubik%27s_cube_logo.svg/1024px-Rubik%27s_cube_logo.svg.png" alt="Logo" width="60" class="mb-3">
+                                <h3 class="fw-bold text-primary">Patient Login</h3>
+                                <p class="text-muted">Access your medical dashboard</p>
+                            </div>
+                            <form id="login-form">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        <input type="text" class="form-control" id="username" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                        <input type="password" class="form-control" id="password" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="remember-me">
+                                    <label class="form-check-label" for="remember-me">Remember me</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 mb-3">Sign In</button>
+                                <div class="text-center">
+                                    <small class="text-muted">Demo credentials: patient1 / password123</small>
+                                </div>
+                            </form>
+                            <div class="text-center mt-3">
+                                <a href="#" onclick="showPage('home'); return false;" class="text-decoration-none">← Back to Home</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PATIENT DASHBOARD PAGE -->
+    <div id="dashboard-page" class="page bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100" style="min-height: 100vh; padding: 2rem;">
+        <header class="flex flex-col md:flex-row items-center justify-between mb-8">
+            <h1 class="text-4xl font-extrabold mb-4 md:mb-0">Patient Dashboard</h1>
+            <div class="flex items-center space-x-4">
+                <span id="patient-name-display" class="bg-gray-200 dark:bg-gray-700 text-sm font-mono px-3 py-1 rounded-full">Patient: Loading...</span>
+                <button id="logout-button" class="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300">Logout</button>
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Medical Readings Card -->
+            <div class="md:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h2 class="text-2xl font-bold mb-4">Live Medical Readings</h2>
+                <div class="flex flex-col sm:flex-row items-center justify-around space-y-6 sm:space-y-0 sm:space-x-6">
+                    <div class="text-center">
+                        <p class="text-gray-500 dark:text-gray-400 text-lg">Oxygen Saturation (SpO₂)</p>
+                        <p id="spo2-reading" class="text-5xl font-bold text-green-500 my-2">--%</p>
+                        <p class="text-gray-400 text-sm">Normal: 95-100%</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-gray-500 dark:text-gray-400 text-lg">Heart Rate (BPM)</p>
+                        <p id="bpm-reading" class="text-5xl font-bold text-red-500 my-2">--</p>
+                        <p class="text-gray-400 text-sm">Normal: 60-100 bpm</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-gray-500 dark:text-gray-400 text-lg">Temperature (°C)</p>
+                        <p id="temperature-reading" class="text-5xl font-bold text-blue-500 my-2">--°C</p>
+                        <p class="text-gray-400 text-sm">Normal: 36.1-37.2°C</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Photo Card -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h2 class="text-2xl font-bold mb-4">Patient Photo</h2>
+                <img id="patient-photo" src="https://placehold.co/600x400/27272a/fafafa?text=Loading..." alt="Patient Photo" class="w-full rounded-lg shadow-md aspect-[3/2] object-cover">
+                <p id="photo-status" class="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">Latest photo from ESP32-CAM.</p>
+            </div>
+            
+            <!-- Health Notes Section -->
+            <div class="md:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h2 class="text-2xl font-bold mb-4">Health Notes 📝</h2>
+                <form id="note-form" class="mb-4">
+                    <div class="mb-3">
+                        <textarea id="note-text" class="form-control rounded-lg" rows="3" placeholder="Add a new health note..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Note</button>
+                </form>
+                <div id="notes-list" class="space-y-2">
+                    <p class="text-center text-gray-500">No notes found. Add one above.</p>
+                </div>
+            </div>
+
+            <!-- Medical Questions Section -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h2 class="text-2xl font-bold mb-4">Medical Questions 🩺</h2>
+                <div class="space-y-4 mb-4">
+                    <!-- Question 1 -->
+                    <div class="accordion-item">
+                        <button class="accordion-header w-full text-left p-4 bg-gray-100 dark:bg-gray-700 rounded-lg font-semibold flex justify-between items-center">
+                            <span>1. Has the patient experienced shortness of breath?</span>
+                            <span class="accordion-icon transform transition-transform duration-200">+</span>
+                        </button>
+                        <div class="accordion-content hidden p-4 text-gray-600 dark:text-gray-300">
+                            <p>This question helps in understanding potential respiratory distress, which could be related to the SpO2 readings.</p>
+                        </div>
+                    </div>
+                    <!-- Question 2 -->
+                    <div class="accordion-item">
+                        <button class="accordion-header w-full text-left p-4 bg-gray-100 dark:bg-gray-700 rounded-lg font-semibold flex justify-between items-center">
+                            <span>2. Does the patient have a history of heart conditions?</span>
+                            <span class="accordion-icon transform transition-transform duration-200">+</span>
+                        </button>
+                        <div class="accordion-content hidden p-4 text-gray-600 dark:text-gray-300">
+                            <p>This information is crucial for interpreting BPM readings and ruling out underlying cardiac issues.</p>
+                        </div>
+                    </div>
+                    <!-- Question 3 -->
+                    <button id="ask-question-btn" class="w-full bg-pantai-blue text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-800 transition duration-300">Ask a New Question</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- PATIENT QUESTIONNAIRE PAGE -->
+    <div id="questionnaire-page" class="page min-h-screen bg-gray-100 dark:bg-gray-900 d-flex align-items-center justify-content-center">
+        <div class="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8">
+            <h1 class="text-3xl font-bold text-center mb-6">Patient Questionnaire</h1>
+            <p class="text-center text-gray-500 dark:text-gray-400 mb-8">Please fill out this form to help us better understand your health.</p>
+            
+            <!-- Progress Bar -->
+            <div class="mb-8">
+                <h2 class="text-lg font-medium mb-2">Progress</h2>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full progress-bar" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <form id="questionnaire-form" class="space-y-6">
+                <!-- Question 1: Full Name -->
+                <div>
+                    <label for="fullName" class="block text-lg font-medium mb-2">What is your full name?</label>
+                    <input type="text" id="fullName" name="fullName" class="w-full p-3 rounded-md bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <!-- Question 2: Date of Birth -->
+                <div>
+                    <label for="dob" class="block text-lg font-medium mb-2">What is your date of birth?</label>
+                    <input type="date" id="dob" name="dob" class="w-full p-3 rounded-md bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <!-- Question 3: Main Symptoms -->
+                <div>
+                    <label for="symptoms" class="block text-lg font-medium mb-2">What are your main symptoms or reasons for your visit today?</label>
+                    <textarea id="symptoms" name="symptoms" rows="4" class="w-full p-3 rounded-md bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                </div>
+
+                <!-- Question 4: Symptom Duration -->
+                <div>
+                    <label for="symptomDuration" class="block text-lg font-medium mb-2">How long have you been experiencing these symptoms?</label>
+                    <input type="text" id="symptomDuration" name="symptomDuration" class="w-full p-3 rounded-md bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <!-- Question 5: Symptom Severity -->
+                <div>
+                    <label for="severity" class="block text-lg font-medium mb-2">On a scale of 1-10, how severe are your symptoms?</label>
+                    <input type="number" id="severity" name="severity" min="1" max="10" class="w-full p-3 rounded-md bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <!-- Question 6: Allergies -->
+                <div>
+                    <label for="allergies" class="block text-lg font-medium mb-2">Do you have any allergies? If yes, please list them.</label>
+                    <textarea id="allergies" name="allergies" rows="3" class="w-full p-3 rounded-md bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <!-- Question 7: Medication -->
+                <div>
+                    <label for="medication" class="block text-lg font-medium mb-2">Are you currently taking any medication? If yes, please list them with dosages.</label>
+                    <textarea id="medication" name="medication" rows="3" class="w-full p-3 rounded-md bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <!-- Question 8: Chronic Conditions -->
+                <div>
+                    <label for="chronicConditions" class="block text-lg font-medium mb-2">Have you been diagnosed with any chronic health conditions? If so, please list them.</label>
+                    <textarea id="chronicConditions" name="chronicConditions" rows="3" class="w-full p-3 rounded-md bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300">Submit Questionnaire</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-6">
+                <a href="#" onclick="showPage('home')" class="inline-block text-pantai-blue hover:underline">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-auto">
+        <div class="container">
+            <p class="mb-1">&copy; 2024 CUBELESS Hospital. All rights reserved.</p>
+            <small>Designed with ❤️ for modern healthcare</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let healthNotes = [];
+
+        // Demo patient data
+        const patientData = {
+            patient1: {
+                name: "John Doe",
+                spo2: 98,
+                bpm: 75,
+                temperature: 98.6,
+                photoUrl: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=300&fit=crop&crop=face"
+            }
+        };
+
+        // UI Helper Functions
+        const showMessage = (message, isError = false, duration = 3000) => {
+            const messageBox = document.getElementById('message-box');
+            messageBox.textContent = message;
+            messageBox.className = `message-box show ${isError ? 'error' : ''}`;
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, duration);
+        };
+
+        const showPage = (pageId) => {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId + '-page').classList.add('active');
+            
+            // If we're on the questionnaire page, initialize its logic
+            if (pageId === 'questionnaire') {
+                initializeQuestionnaire();
+            }
+        };
+
+        const updateNavbar = (isLoggedIn) => {
+            document.getElementById('login-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('dashboard-link').style.display = isLoggedIn ? 'block' : 'none';
+        };
+
+        // Authentication Functions
+        const authenticateUser = (username, password) => {
+            // Demo authentication - in a real app, this would connect to a backend
+            if (username === 'patient1' && password === 'password123') {
+                return { id: 'patient1', name: 'John Doe' };
+            }
+            return null;
+        };
+
+        const loginUser = (userData) => {
+            currentUser = userData;
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            updateNavbar(true);
+            loadPatientData();
+            showPage('dashboard');
+            showMessage(`Welcome, ${userData.name}!`);
+        };
+
+        const logoutUser = () => {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateNavbar(false);
+            showPage('home');
+            showMessage('Logged out successfully');
+        };
+
+        // Patient Data Functions
+        const loadPatientData = () => {
+            if (!currentUser) return;
+            
+            const data = patientData[currentUser.id];
+            if (!data) return;
+
+            // Convert temperature from Fahrenheit to Celsius
+            const tempInFahrenheit = data.temperature;
+            const tempInCelsius = ((tempInFahrenheit - 32) * 5/9).toFixed(1);
+
+            document.getElementById('patient-name-display').textContent = `Patient: ${currentUser.name}`;
+            document.getElementById('spo2-reading').textContent = `${data.spo2}%`;
+            document.getElementById('bpm-reading').textContent = data.bpm;
+            document.getElementById('temperature-reading').textContent = `${tempInCelsius}°C`;
+            document.getElementById('patient-photo').src = data.photoUrl;
+
+            // Set colors based on values
+            const spo2Element = document.getElementById('spo2-reading');
+            spo2Element.style.color = data.spo2 < 90 ? '#ef4444' : '#22c55e';
+            
+            const bpmElement = document.getElementById('bpm-reading');
+            bpmElement.style.color = data.bpm > 100 || data.bpm < 60 ? '#ef4444' : '#f59e0b';
+            
+            const tempElement = document.getElementById('temperature-reading');
+            // Update color logic for Celsius
+            tempElement.style.color = tempInCelsius > 37.5 || tempInCelsius < 36.1 ? '#ef4444' : '#3b82f6';
+            
+            loadHealthNotes();
+        };
+
+        // Health Notes Functions
+        const loadHealthNotes = () => {
+            const savedNotes = localStorage.getItem(`healthNotes_${currentUser.id}`);
+            healthNotes = savedNotes ? JSON.parse(savedNotes) : [];
+            displayHealthNotes();
+        };
+
+        const saveHealthNotes = () => {
+            localStorage.setItem(`healthNotes_${currentUser.id}`, JSON.stringify(healthNotes));
+        };
+
+        const addHealthNote = (text) => {
+            const note = {
+                id: Date.now(),
+                text: text,
+                timestamp: new Date()
+            };
+            healthNotes.unshift(note);
+            saveHealthNotes();
+            displayHealthNotes();
+        };
+
+        const displayHealthNotes = () => {
+            const notesList = document.getElementById('notes-list');
+            if (healthNotes.length === 0) {
+                notesList.innerHTML = '<p class="text-center text-gray-500">No notes found. Add one above.</p>';
+                return;
+            }
+
+            notesList.innerHTML = healthNotes.map(note => `
+                <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg shadow-sm">
+                    <p class="mb-1">${note.text}</p>
+                    <small class="text-gray-500 dark:text-gray-400">${note.timestamp.toLocaleString()}</small>
+                </div>
+            `).join('');
+        };
+
+        // Questionnaire Functions
+        const initializeQuestionnaire = () => {
+            const form = document.getElementById('questionnaire-form');
+            const inputs = form.querySelectorAll('input, textarea');
+            const progressBar = document.getElementById('progress-bar');
+            const totalFields = inputs.length;
+
+            const updateProgress = () => {
+                let completedFields = 0;
+                inputs.forEach(input => {
+                    if (input.value.trim() !== '') {
+                        completedFields++;
+                    }
+                });
+                const progress = (completedFields / totalFields) * 100;
+                progressBar.style.width = `${progress}%`;
+            };
+
+            // Remove existing event listeners to prevent duplicates
+            inputs.forEach(input => {
+                const newListener = () => updateProgress();
+                input.removeEventListener('input', input.listener || newListener);
+                input.addEventListener('input', newListener);
+                input.listener = newListener;
+            });
+            
+            form.removeEventListener('submit', form.listener);
+            const newSubmitListener = (event) => {
+                event.preventDefault();
+                const formData = new FormData(form);
+                const data = {};
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+                console.log('Form Submitted!', data);
+                showMessage('Thank you for completing the questionnaire!');
+                form.reset();
+                updateProgress();
+            };
+            form.addEventListener('submit', newSubmitListener);
+            form.listener = newSubmitListener;
+
+            updateProgress();
+        };
+
+
+        // Function to load the AI chatbox scripts
+        const loadAIChatbox = () => {
+            if (document.getElementById('chtl-script')) {
+                console.log('Chatbox scripts already loaded.');
+                return;
+            }
+
+            // Chatling config script
+            const configScript = document.createElement('script');
+            configScript.textContent = 'window.chtlConfig = { chatbotId: "1943758746" };';
+            document.body.appendChild(configScript);
+
+            // Chatling embed script
+            const embedScript = document.createElement('script');
+            embedScript.async = true;
+            embedScript.setAttribute('data-id', '1943758746');
+            embedScript.id = 'chtl-script';
+            embedScript.type = 'text/javascript';
+            embedScript.src = 'https://chatling.ai/js/embed.js';
+            document.body.appendChild(embedScript);
+        };
+
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for saved user session
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateNavbar(true);
+                if (currentUser) {
+                    loadPatientData();
+                    // Initialize dashboard if we're starting on it
+                    if (document.getElementById('dashboard-page').classList.contains('active')) {
+                        setTimeout(initializeDashboard, 100);
+                    }
+                }
+            }
+
+            // Login form submission
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const username = document.getElementById('username').value.trim();
+                    const password = document.getElementById('password').value.trim();
+                    
+                    if (!username || !password) {
+                        showMessage('Please enter both username and password', true);
+                        return;
+                    }
+                    
+                    const user = authenticateUser(username, password);
+                    if (user) {
+                        loginUser(user);
+                    } else {
+                        showMessage('Invalid credentials. Try: patient1 / password123', true);
+                    }
+                });
+            }
+
+            // Logout button
+            const logoutButton = document.getElementById('logout-button');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    logoutUser();
+                });
+            }
+
+            // Health notes form
+            const noteForm = document.getElementById('note-form');
+            if (noteForm) {
+                noteForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const noteTextElement = document.getElementById('note-text');
+                    if (noteTextElement) {
+                        const noteText = noteTextElement.value.trim();
+                        if (noteText) {
+                            addHealthNote(noteText);
+                            noteTextElement.value = '';
+                            showMessage('Note saved successfully!');
+                        }
+                    }
+                });
+            }
+
+            // Accordion functionality for Medical Questions
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                const header = item.querySelector('.accordion-header');
+                const content = item.querySelector('.accordion-content');
+                const icon = header.querySelector('.accordion-icon');
+                
+                header.addEventListener('click', () => {
+                    const isHidden = content.classList.contains('hidden');
+                    if (isHidden) {
+                        content.classList.remove('hidden');
+                        icon.textContent = '−';
+                    } else {
+                        content.classList.add('hidden');
+                        icon.textContent = '+';
+                    }
+                });
+            });
+
+            // AI chatbox button listener
+            const aiChatboxBtn = document.getElementById('ai-chatbox-btn');
+            if (aiChatboxBtn) {
+                aiChatboxBtn.addEventListener('click', loadAIChatbox);
+            }
+        });
+        // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDUQFS4leJi1IbYlgc4GqZMH-VOxA37cIY",
+  authDomain: "project-advanced-makerslab.firebaseapp.com",
+  projectId: "project-advanced-makerslab",
+  storageBucket: "project-advanced-makerslab.firebasestorage.app",
+  messagingSenderId: "225942634288",
+  appId: "1:225942634288:web:31a48b416afefaf99492f5",
+  measurementId: "G-6R4GN715D1"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+    </script>
+</body>
+</html>
